@@ -71,7 +71,7 @@
     
     .search input {
         height: 40px;
-        width: calc(100% - 120px);
+        width: calc(300% - 120px);
         text-indent: 25px;
         border: 2px solid #d6d4d4;
         border-radius: 3px;
@@ -114,9 +114,11 @@
 <a href="Register.jsp" >Home</a>
 <div class="search-container">
     <div class="search">
-        <i class="fa fa-search"></i>
-        <input type="text" class="form-control" placeholder="Have a question? Ask Now">
-        <button type="submit" class="btn btn-primary">Search</button>
+        <form action="SearchUser" method="post">
+	        <i class="fa fa-search"></i>
+	        <input type="text" name="searchUser" class="form-control" placeholder="Have a question? Ask Now">
+	        <button type="submit" class="btn btn-primary">Search</button>
+        </form>
     </div>
 </div>
 

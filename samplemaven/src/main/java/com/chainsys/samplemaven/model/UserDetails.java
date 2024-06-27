@@ -1,5 +1,6 @@
 package com.chainsys.samplemaven.model;
 
+import jakarta.validation.constraints.NotNull;
 
 public class UserDetails {
 

@@ -43,29 +43,30 @@
         }
 
         input[type="submit"] {
-            background-color: #00008B;
+            background-color: #3c455c;
             color: white;
             border: none;
             cursor: pointer;
         }
 
         input[type="submit"]:hover {
-            background-color: #87CEEB;
+            background-color: black;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Registration Form</h2>
-        <form action="register" method="post">
+        <form action="Register" method="post">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" pattern="[a-zA-z]+" title="Please enter only alphabetic characters (A-Z, a-z)" required>
             
             <label for="mailid">Email:</label>
             <input type="email" id="mailid" name="mailid" required>
             
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+       title="Password must contain at least one digit, one lowercase and one uppercase letter, and be at least 8 characters long" required>
             
             <input type="submit" value="Register">
         </form>

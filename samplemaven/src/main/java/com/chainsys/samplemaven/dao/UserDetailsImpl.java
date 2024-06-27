@@ -1,5 +1,6 @@
 package com.chainsys.samplemaven.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,15 @@ import com.chainsys.samplemaven.mapper.Mapper;
 import com.chainsys.samplemaven.model.UserDetails;
 
 @Configuration
-public class ServerManager {
+public class UserDetailsImpl implements UserDetailsDAO {
 	
 	@Autowired
 	JdbcTemplate connect;
+	
+	public List<UserDetails> checkLogin(String mail, String password){
+	    String query = "SELECT user_name,mail_id, password FROM user_details WHERE mail_id = ? AND password = ?";
+	    return connect.query(query,new Mapper(), mail, password);
+	}
 	
 	public void setUserDetails(UserDetails details) {
 		String query = "insert into user_details (user_name, mail_id, password) values (?,?,?)";
@@ -40,4 +46,9 @@ public class ServerManager {
 		System.out.println("Deleted Successfully!!!");
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<UserDetails> searchUser(String name) {
+		String query = "SELECT user_name, mail_id, password from user_details where user_name LIKE ?";
+		return (List<UserDetails>) connect.query(query,new Mapper(),  "%" + name + "%");
+	}
 }

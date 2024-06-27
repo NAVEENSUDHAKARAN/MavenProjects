@@ -17,5 +17,12 @@ public class Mapper implements RowMapper<UserDetails> {
 		details.setPassword(rs.getString("password"));
 		return details;
 	}
+	
+	/*
+	 * public UserDetails checkLogin(ResultSet rs, int rowNum) throws SQLException {
+	 * UserDetails details = new UserDetails();
+	 * details.setMail(rs.getString("mail_id"));
+	 * details.setPassword(rs.getString("password")); return details; }
+	 */
 
 }

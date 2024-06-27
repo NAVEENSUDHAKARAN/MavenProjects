@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.chainsys.samplemaven.dao.ServerManager;
+import com.chainsys.samplemaven.dao.UserDetailsImpl;
 import com.chainsys.samplemaven.model.UserDetails;
 
 @Controller
@@ -18,52 +18,73 @@ public class MyController {
 
 	
 	@Autowired 
-	ServerManager manager;
+	UserDetailsImpl userDetailsImpl;
 	
-	@RequestMapping("/home")
+	String LIST_USER_JSP = "ListUsers.jsp";
+	String userDetails =  "userDetails";
+	
+	@RequestMapping("/Home")
 	public String registration() {
-		return "Register.jsp";
+		return "LoginPage.jsp";
 	}
 	
-	@PostMapping("/register")
+	@PostMapping("/CheckLogin")
+	public String checkLogin(@RequestParam("email") String mail, @RequestParam("loginPassword") String loginPassword){
+		UserDetails details = new UserDetails();
+		details.setMail(mail);
+		details.setPassword(loginPassword);
+		List<UserDetails> checked = userDetailsImpl.checkLogin(mail, loginPassword);
+		System.out.println("----->" + checked);
+		if(!checked.isEmpty()) {
+			return "Success.jsp";
+		}else {
+			return "Register.jsp";
+		}
+	}
+	
+	@PostMapping("/Register")
 	public String userRegistration(@RequestParam("name") String name, @RequestParam("mailid") String mailid,@RequestParam("password") String password) {
 		UserDetails details = new UserDetails();
 		details.setUserName(name);
 		details.setMail(mailid);
 		details.setPassword(password);
-		manager.setUserDetails(details);
+		userDetailsImpl.setUserDetails(details);
 		return "Success.jsp";
 	}
 	
 	@GetMapping("/ListUsers")
 	public String listUsers(Model model) {
-		System.out.println("In List User");
-		List<UserDetails> listUser = manager.readUsers();
-		model.addAttribute("userDetails" , listUser);
-		return "ListUsers.jsp";
+		List<UserDetails> listUser = userDetailsImpl.readUsers();
+		model.addAttribute(userDetails , listUser);
+		return LIST_USER_JSP;
 	}
 	
 	@GetMapping("/UpdateUser")
 	public String updateUser(@RequestParam("nameToUpdate") String nameToUpdate, @RequestParam("passwordToUpdate") String passwordToUpdate,@RequestParam("mailid") String mailToUpdate,Model model) {
-		System.out.println("In Update User");
 		UserDetails details = new UserDetails();
 		details.setUserName(nameToUpdate);
 		details.setPassword(passwordToUpdate);
 		details.setMail(mailToUpdate);
-		manager.updateUser(details);
-		List<UserDetails> listUser = manager.readUsers();
+		userDetailsImpl.updateUser(details);
+		List<UserDetails> listUser = userDetailsImpl.readUsers();
 		model.addAttribute("userDetails" , listUser);
-		return "ListUsers.jsp";
+		return LIST_USER_JSP;
 	}
 	
 	@PostMapping("/DeleteUser")
 	public String deleteUser(@RequestParam("mailid") String mailToDelete,Model model) {
-		System.out.println("In Delete User");
 		UserDetails details = new UserDetails();
 		details.setMail(mailToDelete);
-		manager.deleteUser(details);
-		List<UserDetails> listUser = manager.readUsers();
+		userDetailsImpl.deleteUser(details);
+		List<UserDetails> listUser = userDetailsImpl.readUsers();
 		model.addAttribute("userDetails" , listUser);
-		return "ListUsers.jsp";
+		return LIST_USER_JSP;
+	}
+	
+	@PostMapping("/SearchUser")
+	public String searchUser(@RequestParam("searchUser") String name, Model model) {
+		List<UserDetails> searchUser = userDetailsImpl.searchUser(name);
+		model.addAttribute("userDetails" , searchUser);
+		return LIST_USER_JSP;
 	}
 }
